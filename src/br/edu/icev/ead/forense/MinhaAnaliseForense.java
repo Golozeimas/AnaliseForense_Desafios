@@ -18,7 +18,7 @@ public class MinhaAnaliseForense implements AnaliseForenseAvancada {
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(caminhoArquivo), 65536)) { // o segundo parametro do FileReader(65536) é para otimização, visto que ele cria um buffer temp de 64KB na RAM para as linhas de logs
             
-            reader.readLine(); // pula direto para a primeira linha
+            reader.readLine(); // pula direto a primeira linha
             
             String linha;
             while ((linha = reader.readLine()) != null) {
@@ -29,7 +29,7 @@ public class MinhaAnaliseForense implements AnaliseForenseAvancada {
                 String action = campos[3];
                 
                 //Cria a pilha de sessao do usurio, se não existir no Map. Ou retorna se já exite
-                Deque<String> pilha = mapDeLoginUsuarios.computeIfAbsent(userId, pilhaUserId -> new ArrayDeque<>());
+                Deque<String> pilha = mapDeLoginUsuarios.computeIfAbsent(userId, pilhaSessoes -> new ArrayDeque<>());
                 
                 //Logica principal
                 if ("LOGIN".equals(action)) {
@@ -63,8 +63,30 @@ public class MinhaAnaliseForense implements AnaliseForenseAvancada {
     @Override
     public List<String> reconstruirLinhaTempo(String caminhoArquivo, String sessionId) 
             throws IOException {
-        // TODO: Implementar Desafio 2
-        return new ArrayList<>();
+        List<String> timeline = new ArrayList<>();
+    
+        //Como o log já está em ordem cronologica, é só fazer a leitura sequencial
+        //O leitor do csv aqui é implementado da mesma lógica que no encontrarSessoesInvalidas( eu só apaguei os comentarios)
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(caminhoArquivo), 65536)) {
+            
+            reader.readLine();
+            
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                String[] campos = linha.split(",", 7);
+                
+                String sId = campos[2]; // sessionsId    
+                String action = campos[3];   
+                
+                // Se for a sessão que procuramos
+                if (sessionId.equals(sId)) {
+                    timeline.add(action);
+                }
+            }
+        }
+        
+        return timeline;
     }
     
     @Override
