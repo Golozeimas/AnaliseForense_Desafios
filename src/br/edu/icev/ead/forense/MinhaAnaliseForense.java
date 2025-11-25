@@ -155,7 +155,7 @@ public class MinhaAnaliseForense implements AnaliseForenseAvancada {
         List<Long> listaTimestamps = new ArrayList<>();
         List<Long> listaBytes = new ArrayList<>();
 
-        try (BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo))) {
+        try (BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo), 65536)) {
             String linha;
             boolean cabecalho = true;
 
