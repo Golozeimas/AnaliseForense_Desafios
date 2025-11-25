@@ -170,7 +170,7 @@ public class MinhaAnaliseForense implements AnaliseForenseAvancada {
                 if (partes.length >= 2) {
                     try {
                         long time = Long.parseLong(partes[0].trim());
-                        long bytes = Long.parseLong(partes[1].trim());
+                        long bytes = Long.parseLong(partes[6].trim());
 
                         listaTimestamps.add(time);
                         listaBytes.add(bytes);
